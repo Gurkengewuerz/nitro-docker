@@ -4,8 +4,6 @@ services:
   arcturus:
     build:
       context: arcturus
-      args:
-        BRANCH: dev
     env_file:
       - .env
     volumes:
@@ -22,8 +20,6 @@ services:
   nitro:
     build:
       context: nitro
-      args:
-        BRANCH: dev
     env_file:
       - .env
     volumes:
