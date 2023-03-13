@@ -23,6 +23,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ./nitro/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nitro/renderer-config.json:/usr/share/nginx/html/renderer-config.json
       - ./nitro/ui-config.json:/usr/share/nginx/html/ui-config.json
     ports:
