@@ -1,0 +1,7 @@
+db/*
+!db/.gitkeep
+assets/assets
+assets/translation/gamedata/
+assets/translation/*.sql
+assets/swf
+assets/usercontent/**/*.png

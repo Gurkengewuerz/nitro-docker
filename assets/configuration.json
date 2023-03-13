@@ -1,0 +1,21 @@
+{
+  "flash.client.url": "http://assets/swf/gordon/PRODUCTION/",
+  "furnidata.load.url": "http://assets/swf/gamedata/furnidata.xml",
+  "productdata.load.url": "http://assets/swf/gamedata/productdata.txt",
+  "figuredata.load.url": "https://www.habbo.com/gamedata/figuredata/1",
+  "figuremap.load.url": "http://assets/swf/gamedata/figuremap.xml",
+  "effectmap.load.url": "http://assets/swf/gamedata/effectmap.xml",
+  "dynamic.download.pet.url": "${flash.client.url}%className%.swf",
+  "dynamic.download.figure.url": "${flash.client.url}%className%.swf",
+  "dynamic.download.effect.url": "${flash.client.url}%className%.swf",
+  "flash.dynamic.download.url": "http://assets/swf/dcr/hof_furni",
+  "dynamic.download.furniture.url": "${flash.dynamic.download.url}/%className%.swf",
+  "external.variables.url": "http://assets/swf/gamedata/external_variables.txt",
+  "external.texts.url": "http://assets/swf/gamedata/external_flash_texts.txt",
+  "convert.figure": "1",
+  "convert.effect": "1",
+  "convert.furniture": "1",
+  "convert.furniture.floor.only": "0",
+  "convert.furniture.wall.only": "0",
+  "convert.pet": "1"
+}

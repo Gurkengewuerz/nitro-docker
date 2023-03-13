@@ -1,0 +1,75 @@
+version: '3.7'
+
+services:
+  arcturus:
+    build:
+      context: arcturus
+      args:
+        BRANCH: dev
+    env_file:
+      - .env
+    volumes:
+      - ./assets/:/app/assets/
+    ports:
+      #- 3000:3000 # gameport
+      #- 3001:3001 # rcon
+      - 2096:2096 # websocket port
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks: [nitro]
+
+  nitro:
+    build:
+      context: nitro
+      args:
+        BRANCH: dev
+    env_file:
+      - .env
+    volumes:
+      - ./nitro/renderer-config.json:/usr/share/nginx/html/renderer-config.json
+      - ./nitro/ui-config.json:/usr/share/nginx/html/ui-config.json
+    ports:
+      - 3000:80
+    restart: unless-stopped
+    networks: [nitro]
+
+  assets-build:
+    build:
+      context: assets
+    env_file:
+      - .env
+    volumes:
+      - ./assets/configuration.json:/app/configuration.json
+      - ./assets/assets:/app/assets
+    restart: "no"
+    networks: [nitro]
+
+  db:
+    image: mariadb:10
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - .env
+    ports:
+      - 3310:3306
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/dumps:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks: [nitro]
+
+  assets:
+    image: nginx:alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - 8080:80
+    volumes:
+      - ./assets/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./assets/:/usr/share/nginx/html
+    networks: [nitro]
+
+networks:
+  nitro:
