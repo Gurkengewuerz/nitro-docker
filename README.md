@@ -53,13 +53,13 @@ docker compose up assets -d
 7. Build assets locally
 ```bash
 # build the nitro assets
-docker compose up assets-build
+docker compose up assets-build --build
 ```
 
 8. Build and Start Arcturus Community Emulator
 ```bash
 # start Arcturus emulator
-docker compose up arcturus
+docker compose up arcturus --build -d
 ```
 
 9. Update `nitro/renderer-config.json` and `nitro/ui-config.json` values to your setup. If the deployment is buggy or throws any errors check the json files for updates.
@@ -67,7 +67,7 @@ docker compose up arcturus
 10. Build and Start Nitro
 ```bash
 # start nitro server
-docker compose up nitro
+docker compose up nitro --build -d
 ```
 
 Next setup reverse proxies for your nginx or traefik server. You should disable proxy side caching.
@@ -100,7 +100,7 @@ promo
 
 After all update nitro files
 ```bash
-docker compose up assets-build
+docker compose up assets-build --build
 ```
 
 
@@ -111,7 +111,7 @@ habbo-downloader --output ./assets/translation --domain de --command gamedata
 cd ./assets/translation
 cp -rf gamedata/external*.txt ../swf/gamedata/
 cd ../..
-docker compose up assets-build
+docker compose up assets-build --build
 cd ./assets/translation
 python FurnitureDataTranslator.py
 python SQLGenerator.py
