@@ -64,7 +64,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./assets/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./assets/nginx:/etc/nginx/conf.d/
       - ./assets/:/usr/share/nginx/html
     networks: [nitro]
 
