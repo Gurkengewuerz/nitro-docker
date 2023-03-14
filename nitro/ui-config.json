@@ -2,7 +2,7 @@
     "image.library.notifications.url": "${image.library.url}notifications/%image%.png",
     "achievements.images.url": "${image.library.url}Quests/%image%.png",
     "camera.url": "http://127.0.0.1:8080/usercontent/camera",
-    "thumbnails.url": "https://camera.url/thumbnail/%thumbnail%.png",
+    "thumbnails.url": "${camera.url}/thumbnail/%thumbnail%.png",
     "url.prefix": "https://website.com",
     "habbopages.url": "${url.prefix}/",
     "group.homepage.url": "${url.prefix}/groups/%groupid%/id",

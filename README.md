@@ -41,6 +41,7 @@ Disable console mode for Arcturus because we are using docker. To update the arc
 UPDATE emulator_settings SET `value`='http://127.0.0.1:8080/usercontent/camera/' WHERE  `key`='camera.url';
 -- do not touch the following values - they use docker volume paths
 UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/' WHERE  `key`='imager.location.output.camera';
+UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/thumbnail/' WHERE  `key`='imager.location.output.thumbnail';
 UPDATE emulator_settings SET `value`='0' WHERE `key`='console.mode';
 ```
 
