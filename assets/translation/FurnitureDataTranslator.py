@@ -2,6 +2,12 @@ import json
 
 todo_types = ["roomitemtypes", "wallitemtypes"]
 
+# Furnidata id = items_base.sprite_id
+# Productdata classname = catalog_items.catalog_name
+# Furnidata classname = items_base.item_name/public_name
+# items_base.id = catalog_items.items_id which is different from sprite id and furnidata id
+
+
 # Create a dictionary mapping classname to name and description
 furniture_dict = {}
 with open('gamedata/furnidata.json', 'r', encoding='utf-8') as f:
@@ -12,6 +18,7 @@ with open('gamedata/furnidata.json', 'r', encoding='utf-8') as f:
             furniture_dict[classname] = {
                 "name": furnitype['name'],
                 "description": furnitype['description'],
+                "specialtype": furnitype['specialtype'],
             }
 
 orig_furniture_data = {}
@@ -26,8 +33,39 @@ for todo_type in todo_types:
         if classname in furniture_dict:
             furnitype['name'] = furniture_dict[classname]['name']
             furnitype['description'] = furniture_dict[classname]['description']
+            furnitype['specialtype'] = furniture_dict[classname]['specialtype']
 
 
 # Save the updated JSON file
 with open('../assets/gamedata/FurnitureData.json', 'w') as f:
     json.dump(orig_furniture_data, f, separators=(',', ':'))
+
+
+
+# ===============================================================================
+
+product_dict = {}
+with open('gamedata/productdata.json', 'r', encoding='utf-8') as f:
+    product_data = json.load(f)
+    for product in product_data["productdata"]["product"]:
+        classname = product['code']
+        product_dict[classname] = {
+            "name": product['name'],
+            "description": product['description'],
+        }
+
+orig_product_dict = {}
+# Load the JSON file
+with open('../assets/gamedata/ProductData.json', 'r', encoding='utf-8') as f:
+    orig_product_dict = json.load(f)
+
+for product in orig_product_dict["productdata"]["product"]:
+    classname = product['code']
+    if classname in product_dict:
+        product['name'] = product_dict[classname]['name']
+        product['description'] = product_dict[classname]['description']
+
+
+# Save the updated JSON file
+with open('../assets/gamedata/ProductData.json', 'w') as f:
+    json.dump(orig_product_dict, f, separators=(',', ':'))
