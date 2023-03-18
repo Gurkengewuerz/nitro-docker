@@ -1,16 +1,17 @@
 FROM node:lts-alpine as builder
 
-ARG BRANCH=dev
+ARG BRANCH=main
 
 WORKDIR /build
 
 RUN apk add --no-cache git
-RUN git clone --branch ${BRANCH} --recurse-submodules https://github.com/billsonnn/nitro-react.git .
-RUN yarn install
-RUN yarn build
+RUN git clone --branch ${BRANCH} --recurse-submodules https://github.com/Gurkengewuerz/nitro.git .
+RUN npm install --force
+RUN npm install --save-dev nx
+RUN npx nx build frontend
 
 
 
 FROM nginx:alpine
 
-COPY --from=builder /build/dist/ /usr/share/nginx/html/
+COPY --from=builder /build/dist/apps/frontend/ /usr/share/nginx/html/
