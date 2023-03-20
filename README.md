@@ -3,7 +3,7 @@ Nitro docker is a quick-to-setup docker environment for the [nitro client](https
 The default configuration can run on localhost.
 
 **This Repository uses `ms4/dev` branch!**
-**This Repository uses a [forked version](https://git.gurkengewuerz.de/nitro/nitro) of Nitro with bug-fixes and more features!**
+**This Repository uses a [forked version](https://github.com/Gurkengewuerz/nitro) of Nitro with bug-fixes and more features!**
 
 ## Requirements
 - Install docker desktop (and for windows, enable WSL support) [from here](https://www.docker.com/get-started/).
