@@ -3,5 +3,6 @@ db/*
 assets/assets
 assets/translation/gamedata/
 assets/translation/*.sql
+!assets/translation/update_crackable.sql
 assets/swf
 assets/usercontent/**/*.png

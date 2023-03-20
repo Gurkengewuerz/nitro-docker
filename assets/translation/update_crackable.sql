@@ -1,0 +1,1 @@
+UPDATE items_base SET interaction_type='crackable' WHERE (SELECT prizes FROM items_crackable WHERE items_crackable.item_id = items_base.id) IS NOT NULL;
