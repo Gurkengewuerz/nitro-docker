@@ -7,101 +7,137 @@ The default configuration can run on localhost.
 
 ## Requirements
 - Install docker desktop (and for windows, enable WSL support) [from here](https://www.docker.com/get-started/).
+- Node.js 15.0 or higher (For the habbo-downloader)
 - Clone this repository
 
 ## Build
-1. Download default assets
-```bash
-# download SWFs
-git clone https://git.krews.org/morningstar/arcturus-morningstar-default-swf-pack.git assets/swf/
-# download assets
-git clone https://github.com/krewsarchive/default-assets.git assets/assets/
-# WEE WOO WEE WOO DO NOT FORGET THIS!
-wget https://github.com/billsonnn/nitro-react/files/10334858/room.nitro.zip
-unzip room.nitro.zip -d assets/assets/bundled/generic
-```
+1. Download the default assets
 
-2. Take a look at `.env` file an configure to your needs
+> The `&& \` is used to combine multiple commands into a single line in a Unix-like command shell. By using && \, the two commands are executed sequentially and only if the first command succeeds. If the first command fails, the second command will not be executed, saving you from potential errors.
 
-3. Start database  
-⚠ **The database port is exposed to `3010` by default** ⚠
 ```bash
-# start database
+git clone https://github.com/Gurkengewuerz/nitro-docker.git && \
+cd nitro-docker/ && \
+git clone https://git.krews.org/morningstar/arcturus-morningstar-default-swf-pack.git assets/swf/ && \
+git clone https://github.com/krewsarchive/default-assets.git assets/assets/ && \
+wget https://github.com/billsonnn/nitro-react/files/10334858/room.nitro.zip && \
+unzip -o room.nitro.zip -d assets/assets/bundled/generic && \
 docker compose up db -d
 ```
-
-4. Manually initialize database  
-Setup using `arcturus/arcturus_3.0.0-stable_base_database--compact.sql` and the correct SQL Updates from [Arcturus sqlupdates](https://git.krews.org/morningstar/Arcturus-Community/-/tree/ms4/dev/sqlupdates).
-The first database come from mysql/dumps, it's the base Arcturus database for 3.0.X with just a default SSO ticket (123) useable via http://127.0.0.1:1080?sso=123
+⚠ **The database port is exposed to `3010` by default** ⚠
 
 
-5. Update emulator settings  
-Disable console mode for Arcturus because we are using docker. To update the arcturus database preferably use rcon. To update a `user_` table disconnect the user. To update the `emulator_settings` table stop the server.
+2. Configure the `.env` to your needs
+
+3. Download SQL updates: 
+https://git.krews.org/morningstar/Arcturus-Community/-/archive/ms4/dev/Arcturus-Community-ms4-dev.zip?path=sqlupdates
+
+4. Manually initialize database with HeidiSQL.
+- Download `HeidiSQL` from: https://www.heidisql.com/download.php
+- Open `HeidiSQL.exe` and connect to the nitro-docker-db container
+
+```text
+# **Default login credentials using HeidySQL:**
+# Network type: MariaDB or MySQL (TCP/IP)
+# Library: libmariadb.dll
+# Hostname /IP: YOURSERVERIPHERE!!
+# User: arcturus_user
+# Password: arcturus_pw
+# Port: 3310
+# Databases: Separated by semicolon
+```
+
+- Select **arcturus**
+
+- Go to **File** --> **Run SQL file...**  and open **arcturus_3.0.0-stable_base_database--compact.sql** Located at: nitro-docker/arcturus/arcturus_3.0.0-stable_base_database--compact.sql
+
+- For the popup: Really auto-detect file encoding? click on **Yes**
+
+- Go to **File** --> **Run SQL file...**  and open **3_0_0 to 3_5_0.sql** Located at: \Arcturus-Community-ms4-dev-sqlupdates\sqlupdates
+
+- Go to **File** --> **Run SQL file...**  and open **3_5_0 to 4_0_0.sql**
+
+- Go to **File** --> **Run SQL file...**  and open **4_0_0_pets_EN.sql**
+
+
+5. Update emulator settings with HeidiSQL
+> This will Disable console mode for Arcturus because we are using docker.
+
+- Select `Query` then copy paste the follwing queries:
+
 ```sql
--- update value path to the assets server
 UPDATE emulator_settings SET `value`='http://127.0.0.1:8080/usercontent/camera/' WHERE  `key`='camera.url';
--- do not touch the following values - they use docker volume paths
+
 UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/' WHERE  `key`='imager.location.output.camera';
+
 UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/thumbnail/' WHERE  `key`='imager.location.output.thumbnail';
+
 UPDATE emulator_settings SET `value`='0' WHERE `key`='console.mode';
 ```
 
-6. Start Asset Server
-```bash
-# start asset server
-docker compose up assets -d
-```
+- Press `F9` on your keyboard to run the queries
 
-7. Build assets locally
-```bash
-# build the nitro assets
-docker compose up assets-build --build
-```
+6. Start Asset Server, Build assets locally, Arcturus Community Emulator and Nitro
 
-8. Build and Start Arcturus Community Emulator
 ```bash
-# start Arcturus emulator
+docker compose up assets -d && \
+docker compose up assets-build --build && \
 docker compose up arcturus --build -d
 ```
 
-9. Update `nitro/renderer-config.json` and `nitro/ui-config.json` values to your setup. If the deployment is buggy or throws any errors check the json files for updates.
+7. Update the: `nitro/renderer-config.json` and `nitro/ui-config.json` values to your setup. If the deployment is buggy or throws any errors check the json files for updates. then Build and Start Nitro
 
-10. Build and Start Nitro
 ```bash
-# start nitro server
 docker compose up nitro --build -d
 ```
 
-Next setup reverse proxies for your nginx or traefik server. You should disable proxy side caching.
+> habbo-downloader requires **Node.js 15.0** or higher you can install the newest version with the following command:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
+nvm install node
+```
+
+> Next setup reverse proxies for your nginx or traefik server. You should disable proxy side caching.
+
 
 ## Update to latest production
-Update a few assets since we want the most up to date assets as possible.
+
+8. Update a few assets since we want the most up to date assets as possible. You can remove habbo-downloader lines if needed or you can just download everything.
+
+```text
+# Replace `--domain de with` your own country code
+# For example if you want Dutch then do `--domain nl`
+# **Here is a list of supported country codes:**
+# Portugese `--domain com.br`
+# Turkish `--domain com.tr`
+# English `--domain com`
+# German `--domain de`
+# Spanish `--domain es`
+# Finnish `--domain fi`
+# French `--domain fr`
+# Italian `--domain it`
+# Dutch `--domain nl`
+```
 
 ```bash
-npm i -g habbo-downloader
-rm -rf assets/swf/gordon/PRODUCTION
-habbo-downloader --output ./assets/swf --domain com --command SEE_LIST_BELOW
-cp -n assets/swf/dcr/hof_furni/icons/* assets/swf/dcr/hof_furni
-mv assets/swf/gordon/PRODUCTION* assets/swf/gordon/PRODUCTION
-```
-
-```
-badgeparts
-badges
-clothes
-effects
-furnitures
-gamedata
-gordon
-hotelview
-icons
-mp3
-pets
-promo
-```
-
-After all update nitro files
-```bash
+apt install npm -y && \
+npm i -g habbo-downloader && \
+rm -rf assets/swf/gordon/PRODUCTION && \
+habbo-downloader --output ./assets/swf --domain com --command badgeparts && \
+habbo-downloader --output ./assets/swf --domain com --command badges && \
+habbo-downloader --output ./assets/swf --domain com --command clothes && \
+habbo-downloader --output ./assets/swf --domain com --command effects && \
+habbo-downloader --output ./assets/swf --domain com --command furnitures && \
+habbo-downloader --output ./assets/swf --domain com --command gamedata && \
+habbo-downloader --output ./assets/swf --domain com --command gordon && \
+habbo-downloader --output ./assets/swf --domain com --command hotelview && \
+habbo-downloader --output ./assets/swf --domain com --command icons && \
+habbo-downloader --output ./assets/swf --domain com --command mp3 && \
+habbo-downloader --output ./assets/swf --domain com --command pets && \
+habbo-downloader --output ./assets/swf --domain com --command promo && \
+cp -n assets/swf/dcr/hof_furni/icons/* assets/swf/dcr/hof_furni && \
+mv assets/swf/gordon/PRODUCTION* assets/swf/gordon/PRODUCTION && \
 docker compose up assets-build --build
 ```
 
@@ -109,16 +145,20 @@ docker compose up assets-build --build
 ## Update Languages
 
 ```bash
-habbo-downloader --output ./assets/translation --domain de --command gamedata
-cd ./assets/translation
-cp -rf gamedata/external*.txt ../swf/gamedata/
-cd ../..
-docker compose up assets-build --build
-cd ./assets/translation
-python FurnitureDataTranslator.py
-python SQLGenerator.py
-# run SQL file
-# restart emulator
+habbo-downloader --output ./assets/translation --domain com --command gamedata && \
+cd ./assets/translation && \
+cp -rf gamedata/external*.txt ../swf/gamedata/ && \
+cd ../.. && \
+docker compose up assets-build --build && \
+cd ./assets/translation && \
+python FurnitureDataTranslator.py && \
+python SQLGenerator.py 
+```
+
+* run SQL file
+
+```bash
+docker compose restart arcturus
 ```
 
 ## Create an archive/backup
