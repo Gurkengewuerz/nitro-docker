@@ -48,5 +48,7 @@ COPY --from=builder-ms4 /build/arcturus-community/target/emulator.jar /app/emula
 RUN mkdir -p /app/plugins
 COPY --from=builder-ms3 /build/arcturus-ws/target/websockets.jar /app/plugins/websockets.jar
 COPY --from=builder-ms4 /build/apollyon/target/apollyon.jar /app/plugins/apollyon.jar
+COPY bootstrap.sh /app/
+RUN chmod +x /app/bootstrap.sh
 
-ENTRYPOINT ["/usr/bin/java", "-jar", "/app/emulator.jar"]
+ENTRYPOINT ["/app/bootstrap.sh"]

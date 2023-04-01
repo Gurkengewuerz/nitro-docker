@@ -20,8 +20,6 @@ git clone https://github.com/Gurkengewuerz/nitro-docker.git && \
 cd nitro-docker/ && \
 git clone https://git.krews.org/morningstar/arcturus-morningstar-default-swf-pack.git assets/swf/ && \
 git clone https://github.com/krewsarchive/default-assets.git assets/assets/ && \
-wget https://github.com/billsonnn/nitro-react/files/10334858/room.nitro.zip && \
-unzip -o room.nitro.zip -d assets/assets/bundled/generic && \
 docker compose up db -d
 ```
 ⚠ **The database port is exposed to `3010` by default** ⚠
