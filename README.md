@@ -59,6 +59,10 @@ https://git.krews.org/morningstar/Arcturus-Community/-/archive/ms4/dev/Arcturus-
 
 - Go to **File** --> **Run SQL file...**  and open **4_0_0_pets_EN.sql**
 
+- Go to **File** --> **Run SQL file...**  and open **4_0_0_permissions.sql**
+
+- Go to **File** --> **Run SQL file...**  and open **perms_groups.sql** Located at: ./arcturus
+
 
 5. Update emulator settings with HeidiSQL
 > This will Disable console mode for Arcturus because we are using docker.
@@ -83,6 +87,7 @@ UPDATE emulator_settings SET `value`='0' WHERE `key`='console.mode';
 docker compose up assets -d && \
 docker compose up assets-build --build && \
 docker compose up arcturus --build -d
+docker compose up backup -d
 ```
 
 7. Update the: `nitro/renderer-config.json` and `nitro/ui-config.json` values to your setup. If the deployment is buggy or throws any errors check the json files for updates. then Build and Start Nitro

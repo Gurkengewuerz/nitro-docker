@@ -61,24 +61,18 @@
     "hotelview": {
         "show.avatar": true,
         "widgets": {
-            "slot.1.widget": "promoarticle",
+            "slot.1.widget": "",
             "slot.1.conf": {},
-            "slot.2.widget": "widgetcontainer",
-            "slot.2.conf": {
-                "image": "${image.library.url}web_promo_small/spromo_Canal_Bundle.png",
-                "texts": "2021NitroPromo",
-                "btnLink": "https://google.com"
-            },
-            "slot.3.widget": "promoarticle",
+            "slot.2.widget": "",
+            "slot.2.conf": {},
+            "slot.3.widget": "",
             "slot.3.conf": {},
             "slot.4.widget": "",
             "slot.4.conf": {},
             "slot.5.widget": "",
             "slot.5.conf": {},
-            "slot.6.widget": "achievementcompetition_hall_of_fame",
-            "slot.6.conf": {
-                "campaign": "habboFameComp"
-            },
+            "slot.6.widget": "",
+            "slot.6.conf": {},
             "slot.7.widget": "",
             "slot.7.conf": {}
         },
@@ -104,8 +98,8 @@
         5
     ],
     "catalog.links": {
-        "hc.buy_hc": "habbo_club",
-        "hc.hc_gifts": "club_gifts",
+        "hc.buy_hc": "hc_membership",
+        "hc.hc_gifts": "hcpayday",
         "pets.buy_food": "pet_food",
         "pets.buy_saddle": "saddles"
     },
@@ -113,7 +107,7 @@
         "benefits.info": true,
         "payday.info": true,
         "gift.info": true,
-        "benefits.habbopage": "habboclub",
+        "benefits.habbopage": "hc_membership",
         "payday.habbopage": "hcpayday"
     },
     "respect.options": {

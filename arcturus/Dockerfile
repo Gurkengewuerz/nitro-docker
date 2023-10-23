@@ -4,6 +4,8 @@ RUN yum install -y git
 
 WORKDIR /build/arcturus-community
 RUN git clone --branch dev --recurse-submodules https://git.krews.org/morningstar/Arcturus-Community.git .
+# explicit pin this version
+RUN git checkout f051d1d1
 RUN mvn package
 RUN mvn install
 
@@ -18,13 +20,17 @@ RUN cp target/NitroWebsockets-*.jar target/websockets.jar
 FROM maven:3-amazoncorretto-19 AS builder-ms4
 
 ARG BRANCH=ms4/dev
+ARG COMMIT=3bb8ce16
 
 RUN yum install -y git
 
 WORKDIR /build/arcturus-community
 RUN git clone --branch ${BRANCH} --recurse-submodules https://git.krews.org/morningstar/Arcturus-Community.git .
+RUN git checkout $COMMIT
 RUN sed -i 's#Scanner scanner = new Scanner(System.in);##g' src/main/java/com/eu/habbo/Emulator.java
 RUN sed -i 's#scanner.nextLine();##g' src/main/java/com/eu/habbo/Emulator.java
+ADD patches/ /build/arcturus-community/patches/
+RUN find "$(readlink -f patches/)" -type f -name "*.patch" | xargs -I {} sh -c 'echo "Applying {}"; git apply {}'
 RUN mvn package
 RUN mvn install
 RUN cp target/Morningstar*-with-dependencies.jar target/emulator.jar

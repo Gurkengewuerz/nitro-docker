@@ -1,0 +1,26 @@
+diff --git a/src/main/java/com/eu/habbo/habbohotel/commands/list/ChangeNameCommand.java b/src/main/java/com/eu/habbo/habbohotel/commands/list/ChangeNameCommand.java
+index 3952b300..4e9a5c5f 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/commands/list/ChangeNameCommand.java
++++ b/src/main/java/com/eu/habbo/habbohotel/commands/list/ChangeNameCommand.java
+@@ -7,7 +7,7 @@ import com.eu.habbo.messages.outgoing.users.UserObjectComposer;
+ 
+ public class ChangeNameCommand extends Command {
+     public ChangeNameCommand() {
+-        super("cmd_change_name");
++        super("cmd_changename");
+     }
+ 
+     @Override
+diff --git a/src/main/java/com/eu/habbo/habbohotel/commands/list/UserInfoCommand.java b/src/main/java/com/eu/habbo/habbohotel/commands/list/UserInfoCommand.java
+index 39cb7f8f..bd4f45e1 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/commands/list/UserInfoCommand.java
++++ b/src/main/java/com/eu/habbo/habbohotel/commands/list/UserInfoCommand.java
+@@ -16,7 +16,7 @@ import java.util.*;
+ 
+ public class UserInfoCommand extends Command {
+     public UserInfoCommand() {
+-        super("cmd_userinfo");
++        super("cmd_user_info");
+     }
+ 
+     @Override

@@ -56,6 +56,30 @@ services:
     restart: unless-stopped
     networks: [nitro]
 
+  backup:
+    image: tiredofit/db-backup
+    depends_on:
+      - db
+    volumes:
+      - ./db/backup:/backup
+    environment:
+      - TIMEZONE=UTC
+      - DB_TYPE=mariadb
+      - DB_HOST=db
+      - DB_USER=$MYSQL_USER
+      - DB_PASS=$MYSQL_PASSWORD
+      - DB_NAME=$MYSQL_DATABASE
+      - COMPRESSION=GZ
+      - ENABLE_CHECKSUM=TRUE
+      - CHECKSUM=SHA1
+      - DB_DUMP_BEGIN=0315
+      - DB_DUMP_FREQ=1440
+      - DB_CLEANUP_TIME=10080
+      - CREATE_LATEST_SYMLINK=FALSE
+      - CONTAINER_ENABLE_MONITORING=FALSE
+    restart: unless-stopped
+    networks: [nitro]
+
   assets:
     image: nginx:alpine
     restart: unless-stopped

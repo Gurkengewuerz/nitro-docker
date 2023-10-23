@@ -7,3 +7,5 @@ assets/translation/*.sql
 !assets/translation/fix_room_items.sql
 assets/swf
 assets/usercontent/**/*.png
+~$*.xlsx
+export/

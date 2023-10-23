@@ -1,0 +1,38 @@
+diff --git a/src/main/java/com/eu/habbo/habbohotel/GameEnvironment.java b/src/main/java/com/eu/habbo/habbohotel/GameEnvironment.java
+index 8c38c442..b1fa237a 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/GameEnvironment.java
++++ b/src/main/java/com/eu/habbo/habbohotel/GameEnvironment.java
+@@ -62,6 +62,8 @@ public class GameEnvironment {
+         log.info("GameEnvironment -> Loading...");
+ 
+         this.permissionsManager = new PermissionsManager();
++        this.permissionsManager.reload();
++
+         this.habboManager = new HabboManager();
+         this.hotelViewManager = new HotelViewManager();
+         this.itemManager = new ItemManager();
+diff --git a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionGroup.java b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionGroup.java
+index 60d31f09..232a0314 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionGroup.java
++++ b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionGroup.java
+@@ -76,7 +76,7 @@ public class PermissionGroup {
+             statement.setInt(1, this.id);
+             try(ResultSet set = statement.executeQuery()) {
+                 while (set.next()) {
+-                    PermissionRight right = Emulator.getGameEnvironment().getPermissionsManager().getRight(set.getString("name"));
++                    PermissionRight right = Emulator.getGameEnvironment().getPermissionsManager().getRight(set.getString("right_name"));
+                     this.rights.put(right, PermissionSetting.fromString(set.getString("setting_type")));
+                 }
+             }
+diff --git a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
+index e8fca734..73243918 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
++++ b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
+@@ -28,7 +28,6 @@ public class PermissionsManager {
+         this.fixedCommands = new HashMap<>();
+         this.permissionRights = new HashMap<>();
+         this.specialEnables = new TIntIntHashMap();
+-        this.reload();
+         log.info("Permissions Manager -> Loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
+     }
+ 
