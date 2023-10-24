@@ -1,0 +1,24 @@
+diff --git a/src/main/java/com/eu/habbo/habbohotel/users/subscriptions/SubscriptionHabboClub.java b/src/main/java/com/eu/habbo/habbohotel/users/subscriptions/SubscriptionHabboClub.java
+index f4a93859..1f7eaf31 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/users/subscriptions/SubscriptionHabboClub.java
++++ b/src/main/java/com/eu/habbo/habbohotel/users/subscriptions/SubscriptionHabboClub.java
+@@ -284,16 +284,13 @@ public class SubscriptionHabboClub extends Subscription {
+                 }
+             }
+ 
++            SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
++
+             Date date = new java.util.Date(HC_PAYDAY_NEXT_DATE * 1000L);
+             date = Emulator.modifyDate(date, HC_PAYDAY_INTERVAL);
+             HC_PAYDAY_NEXT_DATE = (int) (date.getTime() / 1000L);
+ 
+-            try (PreparedStatement stm2 = connection.prepareStatement("UPDATE `emulator_settings` SET `value` = ? WHERE `key` = ?")) {
+-                SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+-                stm2.setString(1, sdf.format(date));
+-                stm2.setString(2, "subscriptions.hc.payday.next_date");
+-                stm2.execute();
+-            }
++            Emulator.getConfig().update("subscriptions.hc.payday.next_date", sdf.format(date));
+ 
+             try (PreparedStatement stm2 = connection.prepareStatement("UPDATE users_settings SET last_hc_payday = ? WHERE user_id IN (SELECT user_id FROM `users_subscriptions` WHERE subscription_type = '" + Subscription.HABBO_CLUB + "' AND `active` = 1 AND `timestamp_start` < ? AND (`timestamp_start` + `duration`) > ? GROUP BY user_id)")) {
+                 stm2.setInt(1, timestampNow);
