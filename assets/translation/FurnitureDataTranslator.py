@@ -22,6 +22,8 @@ with open('gamedata/furnidata.json', 'r', encoding='utf-8') as f:
                 "description": furnitype['description'],
                 "specialtype": furnitype['specialtype'],
             }
+            if str(furniture_dict[classname]['description']).endswith("desc"):
+                furniture_dict[classname]['description'] = ""
 
 with open('gamedata/productdata.json', 'r', encoding='utf-8') as f:
     product_data = json.load(f)
@@ -31,6 +33,8 @@ with open('gamedata/productdata.json', 'r', encoding='utf-8') as f:
             "name": product['name'],
             "description": product['description'],
         }
+        if str(furniture_dict[classname]['description']).endswith("desc"):
+            furniture_dict[classname]['description'] = ""
 
 orig_furniture_data = {}
 # Load the JSON file
