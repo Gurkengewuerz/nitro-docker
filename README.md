@@ -90,7 +90,8 @@ UPDATE emulator_settings SET `value`='0' WHERE `key`='console.mode';
 ```bash
 docker compose up assets -d && \
 docker compose up assets-build --build && \
-docker compose up arcturus --build -d
+docker compose up imager --build -d && \
+docker compose up arcturus --build -d && \
 docker compose up backup -d
 ```
 
