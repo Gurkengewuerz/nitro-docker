@@ -92,5 +92,17 @@ services:
       - ./assets/:/usr/share/nginx/html
     networks: [nitro]
 
+  imager:
+    build:
+      context: imager
+    env_file:
+      - .env
+    volumes:
+      - ./assets/:/app/assets/
+    ports:
+      - 3001:3000
+    restart: unless-stopped
+    networks: [nitro]
+
 networks:
   nitro:
