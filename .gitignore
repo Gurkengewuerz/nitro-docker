@@ -9,3 +9,4 @@ assets/swf
 assets/usercontent/**/*.png
 ~$*.xlsx
 export/
+assets/usercontent/imageproxy/

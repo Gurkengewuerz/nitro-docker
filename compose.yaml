@@ -104,5 +104,17 @@ services:
     restart: unless-stopped
     networks: [nitro]
 
+  imgproxy:
+    image: ghcr.io/willnorris/imageproxy
+    depends_on:
+      # proxied through nginx of assets
+      - assets
+    volumes:
+      - "./assets/usercontent/imageproxy/cache:/tmp/imageproxy"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks: [nitro]
+
 networks:
   nitro:

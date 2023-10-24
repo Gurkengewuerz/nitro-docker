@@ -80,6 +80,8 @@ UPDATE emulator_settings SET `value`='/app/assets/usercontent/badgeparts/' WHERE
 
 UPDATE emulator_settings SET `value`='/app/assets/swf/c_images/Badgeparts' WHERE  `key`='imager.location.badgeparts';
 
+UPDATE emulator_settings SET `value`='http://127.0.0.1:8080/api/imageproxy/0x0/http://img.youtube.com/vi/%video%/default.jpg' WHERE  `key`='imager.url.youtube';
+
 UPDATE emulator_settings SET `value`='0' WHERE `key`='console.mode';
 ```
 
