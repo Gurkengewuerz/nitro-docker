@@ -116,5 +116,19 @@ services:
     restart: unless-stopped
     networks: [nitro]
 
+  cms:
+    build:
+      context: atomcms
+    depends_on:
+      - imager
+      - arcturus
+    ports:
+      - "8081:80"
+    volumes:
+      - ".env.cms:/var/www/html/.env"
+      - "./atomcms/storage:/var/www/html/storage/app/public"
+      - "./atomcms/logs:/var/www/html/storage/logs"
+    networks: [nitro]
+
 networks:
   nitro:

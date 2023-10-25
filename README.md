@@ -94,9 +94,8 @@ UPDATE emulator_settings SET `value`='/app/assets/swf/c_images/Badgeparts' WHERE
 ```bash
 docker compose up assets -d && \
 docker compose up assets-build --build && \
-docker compose up imager --build -d && \
-docker compose up arcturus --build -d && \
-docker compose up backup -d
+docker compose up imgproxy --build -d && \
+docker compose up arcturus --build -d
 ```
 
 7. Update the: `nitro/renderer-config.json` and `nitro/ui-config.json` values to your setup. If the deployment is buggy or throws any errors check the json files for updates. then Build and Start Nitro
@@ -175,6 +174,43 @@ python SQLGenerator.py
 ```bash
 docker compose restart arcturus
 ```
+
+## AtomCMS
+
+1. change [`.env.cms`](/.env.cms) to your needs
+
+2. Check your permissions table. Use [**perms_groups.sql**](/arcturus/perms_groups.sql) if unclear. AtomCMS is not using the new permission layout so we are legacy supporting it by "copy" the most important values.
+
+4. Start the CMS
+```bash
+docker compose up cms --build -d
+```
+
+5. Generate a new secret APP_KEY
+```bash
+docker compose exec cms php artisan key:generate
+```
+
+6. Open the CMS in the browser by default [`127.0.0.1:8081`](http://127.0.0.1:8081/) and do the basic setup.
+
+7. Update automcms settings with HeidiSQL
+
+```sql
+UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/api/imager/?figure=' WHERE  `key` = 'avatar_imager';
+UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/swf/c_images/album1584' WHERE  `key` = 'badges_path';
+UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/usercontent/badgeparts/generated' WHERE  `key` = 'group_badge_path';
+UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/swf/dcr/hof_furni' WHERE  `key` = 'furniture_icons_path';
+
+UPDATE website_settings SET `value` = 'arcturus' WHERE  `key` = 'rcon_ip';
+UPDATE website_settings SET `value` = '3001' WHERE  `key` = 'rcon_port';
+
+-- check values - these values are for the perms_groups.sql
+UPDATE website_settings SET `value` = '11' WHERE  `key` = 'min_staff_rank';
+UPDATE website_settings SET `value` = '12' WHERE  `key` = 'min_maintenance_login_rank';
+UPDATE website_settings SET `value` = '13' WHERE  `key` = 'min_housekeeping_rank';
+```
+
+**ℹ Notice**: badgeparts generator must be set up in arcturus and all files must be synced with the badge_parts.nitro
 
 ## Create an archive/backup
 

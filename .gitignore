@@ -11,3 +11,9 @@ assets/usercontent/**/*.png
 ~$*.xlsx
 export/
 assets/usercontent/imageproxy/
+atomcms/cache/*
+atomcms/storage/*
+atomcms/logs/*
+!atomcms/cache/.gitkeep
+!atomcms/storage/.gitkeep
+!atomcms/logs/.gitkeep
