@@ -39,7 +39,7 @@ https://git.krews.org/morningstar/Arcturus-Community/-/archive/ms4/dev/Arcturus-
 ```text
 # **Default login credentials using HeidySQL:**
 # Network type: MariaDB or MySQL (TCP/IP)
-# Library: libmariadb.dll
+# Library: libmysql.dll
 # Hostname /IP: YOURSERVERIPHERE!!
 # User: arcturus_user
 # Password: arcturus_pw

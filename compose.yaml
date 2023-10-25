@@ -43,8 +43,9 @@ services:
     networks: [nitro]
 
   db:
-    image: mariadb:10
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql:8
+    depends_on:
+      - backup
     env_file:
       - .env
     ports:
@@ -58,13 +59,11 @@ services:
 
   backup:
     image: tiredofit/db-backup
-    depends_on:
-      - db
     volumes:
       - ./db/backup:/backup
     environment:
       - TIMEZONE=UTC
-      - DB_TYPE=mariadb
+      - DB_TYPE=mysql
       - DB_HOST=db
       - DB_USER=$MYSQL_USER
       - DB_PASS=$MYSQL_PASSWORD
