@@ -5,6 +5,7 @@ assets/translation/gamedata/
 assets/translation/*.sql
 !assets/translation/update_crackable.sql
 !assets/translation/fix_room_items.sql
+!assets/translation/fix_song_disks.sql
 assets/swf
 assets/usercontent/**/*.png
 ~$*.xlsx
