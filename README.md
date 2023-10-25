@@ -76,7 +76,7 @@ UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/' WHERE  `k
 
 UPDATE emulator_settings SET `value`='/app/assets/usercontent/camera/thumbnail/' WHERE  `key`='imager.location.output.thumbnail';
 
-UPDATE emulator_settings SET `value`='/app/assets/usercontent/badgeparts/' WHERE  `key`='imager.location.output.badges';
+UPDATE emulator_settings SET `value`='/app/assets/usercontent/badgeparts/generated/' WHERE  `key`='imager.location.output.badges';
 
 UPDATE emulator_settings SET `value`='/app/assets/swf/c_images/Badgeparts' WHERE  `key`='imager.location.badgeparts';
 
