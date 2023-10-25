@@ -1,7 +1,7 @@
 FROM node:lts-alpine as builder
 
 ARG BRANCH=main
-ARG COMMIT=9a88668
+ARG COMMIT=ee47e21
 
 WORKDIR /build
 
