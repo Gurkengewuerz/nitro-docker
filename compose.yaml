@@ -95,12 +95,13 @@ services:
   imager:
     build:
       context: imager
+    depends_on:
+      # proxied through nginx of assets
+      - assets
     env_file:
       - .env
     volumes:
       - ./assets/:/app/assets/
-    ports:
-      - 3001:3000
     restart: unless-stopped
     networks: [nitro]
 
