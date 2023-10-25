@@ -178,6 +178,17 @@ docker compose restart arcturus
 
 ## Create an archive/backup
 
+### Export running containers
 ```bash
-7z a -mx=9 nitro-$(date -d "today" +"%Y%m%d_%H%M").7z ./
+bash ./export_containers.sh
+```
+
+### Create manual database backup
+```bash
+docker compose exec backup backup-now
+```
+
+### Save all data
+```bash
+7z a -mx=9 nitro-$(date -d "today" +"%Y%m%d_%H%M").7z ./ -x!db/data
 ```
