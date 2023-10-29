@@ -28,7 +28,7 @@ RUN composer install
 
 
 # ---------------------------------------------
-FROM node:lts-alpine as npm-builder
+FROM node:lts as npm-builder
 
 WORKDIR /var/www/html
 

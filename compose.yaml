@@ -128,6 +128,7 @@ services:
       - ".cms.env:/var/www/html/.env"
       - "./atomcms/storage:/var/www/html/storage/app/public"
       - "./atomcms/logs:/var/www/html/storage/logs"
+    restart: unless-stopped
     networks: [nitro]
 
 networks:

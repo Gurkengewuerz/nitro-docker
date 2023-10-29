@@ -20,6 +20,10 @@ This setup installs a complete local setup. Connecting externally requires editi
 | CMS                   | http://127.0.0.1:8081 | example.com              |
 | Nitro Client          | http://127.0.0.1:3080 | game.example.com         |
 
+```sql
+UPDATE emulator_settings SET `value`='*.mc8051.de' WHERE  `key`='websockets.whitelist';
+```
+
 ## Build
 1. Download the default assets
 
