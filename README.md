@@ -179,7 +179,8 @@ cd ../.. && \
 docker compose up assets-build --build && \
 cd ./assets/translation && \
 python FurnitureDataTranslator.py && \
-python SQLGenerator.py 
+python SQLGenerator.py && \
+python external_text.py --domain com
 ```
 
 * run SQL file
