@@ -1,0 +1,50 @@
+services:
+
+  arcturus:
+    ports: 
+      - "2096:2096"
+
+
+  nitro:
+    ports: []
+    networks: [nitro, traefik]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.pixels-nitro.entrypoints=websecure"
+      - "traefik.http.routers.pixels-nitro.rule=Host(`$TRAEFIK_VIRTUAL_HOST_NITRO`)"
+      - "traefik.http.routers.pixels-nitro.service=pixels-nitro-srv"
+      - "traefik.http.services.pixels-nitro-srv.loadbalancer.server.port=80"
+
+
+  db:
+    ports: []
+
+
+  assets:
+    ports: []
+    networks: [nitro, traefik]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.pixels-assets.entrypoints=websecure"
+      - "traefik.http.routers.pixels-assets.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ASSETS`)"
+      - "traefik.http.routers.pixels-assets.service=pixels-assets-srv"
+      - "traefik.http.services.pixels-assets-srv.loadbalancer.server.port=80"
+
+
+  cms:
+    ports: []
+    networks: [nitro, traefik]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.pixels-cms.entrypoints=websecure"
+      - "traefik.http.routers.pixels-cms.rule=Host(`$TRAEFIK_VIRTUAL_HOST_CMS`)"
+      - "traefik.http.routers.pixels-cms.service=pixels-cms-srv"
+      - "traefik.http.services.pixels-cms-srv.loadbalancer.server.port=80"
+
+networks:
+  nitro:
+  traefik:
+    external: true

@@ -10,6 +10,16 @@ The default configuration can run on localhost.
 - Node.js LTS or higher (For the habbo-downloader)
 - Clone this repository
 
+## Notes
+This setup installs a complete local setup. Connecting externally requires editing the configurations. Serach for the following ports and edit them. Down below is a recommended domain setup when using reverse proxies like traefik.
+
+| Server                | Local Setup           | Recommended Domain Setup |
+|-----------------------|-----------------------|--------------------------|
+| MorningStar WebSocket | ws://127.0.0.1:2096   | game.example.com         |
+| Assets Server         | http://127.0.0.1:8080 | assets.example.com       |
+| CMS                   | http://127.0.0.1:8081 | example.com              |
+| Nitro Client          | http://127.0.0.1:3080 | game.example.com         |
+
 ## Build
 1. Download the default assets
 
@@ -177,7 +187,7 @@ docker compose restart arcturus
 
 ## AtomCMS
 
-1. change [`.env.cms`](/.env.cms) to your needs
+1. change [`.cms.env`](/.cms.env) to your needs
 
 2. Check your permissions table. Use [**perms_groups.sql**](/arcturus/perms_groups.sql) if unclear. AtomCMS is not using the new permission layout so we are legacy supporting it by "copy" the most important values.
 
