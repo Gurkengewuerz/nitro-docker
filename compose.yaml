@@ -82,6 +82,9 @@ services:
   assets:
     image: nginx:alpine
     restart: unless-stopped
+    depends_on:
+      - imager
+      - imgproxy
     env_file:
       - .env
     ports:
@@ -94,9 +97,6 @@ services:
   imager:
     build:
       context: imager
-    depends_on:
-      # proxied through nginx of assets
-      - assets
     env_file:
       - .env
     volumes:
@@ -106,9 +106,6 @@ services:
 
   imgproxy:
     image: ghcr.io/willnorris/imageproxy
-    depends_on:
-      # proxied through nginx of assets
-      - assets
     volumes:
       - "./assets/usercontent/imageproxy/cache:/tmp/imageproxy"
     env_file:
@@ -120,7 +117,7 @@ services:
     build:
       context: atomcms
     depends_on:
-      - imager
+      - assets
       - arcturus
     ports:
       - "8081:80"
