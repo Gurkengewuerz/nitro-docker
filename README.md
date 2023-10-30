@@ -21,10 +21,17 @@ This setup installs a complete local setup. Connecting externally requires editi
 | Nitro Client          | http://127.0.0.1:3080 | game.example.com         |
 
 ```sql
-UPDATE emulator_settings SET `value`='*.mc8051.de' WHERE  `key`='websockets.whitelist';
+UPDATE emulator_settings SET `value`='*.example.com' WHERE  `key`='websockets.whitelist';
 ```
 
 ## Build
+0. copy necessary files to work locally
+The following command searches for all files starting with `example-`, copies the file and remove the `example-` prefix. If you don't have access to the find command, you can do it manually.
+
+```bash
+find . -type f -name 'example-*' -exec sh -c 'cp -rf "$0" "${0/example-/}"' {} \;
+```
+
 1. Download the default assets
 
 > The `&& \` is used to combine multiple commands into a single line in a Unix-like command shell. By using && \, the two commands are executed sequentially and only if the first command succeeds. If the first command fails, the second command will not be executed, saving you from potential errors.

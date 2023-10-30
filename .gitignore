@@ -17,3 +17,6 @@ atomcms/logs/*
 !atomcms/cache/.gitkeep
 !atomcms/storage/.gitkeep
 !atomcms/logs/.gitkeep
+*.env
+nitro/*.json
+!example-*
