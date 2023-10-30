@@ -227,9 +227,9 @@ UPDATE website_settings SET `value` = 'arcturus' WHERE  `key` = 'rcon_ip';
 UPDATE website_settings SET `value` = '3001' WHERE  `key` = 'rcon_port';
 
 -- check values - these values are for the perms_groups.sql
-UPDATE website_settings SET `value` = '11' WHERE  `key` = 'min_staff_rank';
-UPDATE website_settings SET `value` = '12' WHERE  `key` = 'min_maintenance_login_rank';
-UPDATE website_settings SET `value` = '13' WHERE  `key` = 'min_housekeeping_rank';
+UPDATE website_settings SET `value` = '4' WHERE  `key` = 'min_staff_rank';
+UPDATE website_settings SET `value` = '5' WHERE  `key` = 'min_maintenance_login_rank';
+UPDATE website_settings SET `value` = '6' WHERE  `key` = 'min_housekeeping_rank';
 ```
 
 **ℹ Notice**: badgeparts generator must be set up in arcturus and all files must be synced with the badge_parts.nitro
