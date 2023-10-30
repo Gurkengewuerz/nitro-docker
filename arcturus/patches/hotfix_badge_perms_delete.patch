@@ -1,0 +1,41 @@
+diff --git a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
+index e8fca734..86c01371 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
++++ b/src/main/java/com/eu/habbo/habbohotel/permissions/PermissionsManager.java
+@@ -155,4 +155,8 @@ public class PermissionsManager {
+     public boolean isEffectBlocked(int effectId, int groupId) {
+         return this.specialEnables.contains(effectId) && this.specialEnables.get(effectId) > groupId;
+     }
++
++    public Collection<PermissionGroup> getPermissionGroups() {
++        return permissionGroups.values();
++    }
+ }
+diff --git a/src/main/java/com/eu/habbo/habbohotel/users/inventory/BadgesComponent.java b/src/main/java/com/eu/habbo/habbohotel/users/inventory/BadgesComponent.java
+index 56920133..69b5b110 100644
+--- a/src/main/java/com/eu/habbo/habbohotel/users/inventory/BadgesComponent.java
++++ b/src/main/java/com/eu/habbo/habbohotel/users/inventory/BadgesComponent.java
+@@ -13,8 +13,8 @@ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+ import java.sql.SQLException;
+ import java.util.ArrayList;
++import java.util.Collection;
+ import java.util.Comparator;
+-import java.util.Set;
+ 
+ @Slf4j
+ public class BadgesComponent {
+@@ -36,9 +36,11 @@ public class BadgesComponent {
+                 while (set.next()) {
+                     HabboBadge badge = new HabboBadge(set, habbo);
+ 
+-                    if(!(habbo.getHabboInfo().getPermissionGroup().hasBadge() && habbo.getHabboInfo().getPermissionGroup().getBadge() == badge.getCode())) {
++                    Collection<PermissionGroup> permissionGroups = Emulator.getGameEnvironment().getPermissionsManager().getPermissionGroups();
++                    for (PermissionGroup permissionGroup : permissionGroups) {
++                        if (habbo.getHabboInfo().getPermissionGroup().getId() == permissionGroup.getId()) continue;
++                        if (!permissionGroup.hasBadge() || permissionGroup.getBadge() != badge.getCode()) continue;
+                         deleteBadge(habbo.getHabboInfo().getId(), badge.getCode());
+-                        continue;
+                     }
+ 
+                     badgesList.add(badge);
