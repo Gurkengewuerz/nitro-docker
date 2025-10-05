@@ -29,7 +29,7 @@ UPDATE emulator_settings SET `value`='*.example.com' WHERE  `key`='websockets.wh
 The following command searches for all files starting with `example-`, copies the file and remove the `example-` prefix. If you don't have access to the find command, you can do it manually.
 
 ```bash
-find . -type f -name 'example-*' -exec sh -c 'cp -rf "$0" "${0/example-/}"' {} \;
+find . -type f -name 'example-*' -exec bash -c 'cp -rf "$0" "${0/example-/}"' {} \;
 ```
 
 1. Download the default assets
