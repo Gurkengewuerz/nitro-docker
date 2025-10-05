@@ -1,4 +1,4 @@
-FROM node:lts as builder
+FROM node:20-slim as builder
 
 ARG BRANCH=dev
 ARG COMMIT=7ff2405
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
         libgif-dev \
         librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
+    
 RUN apt remove apt --autoremove -y --allow-remove-essential
 
 RUN git clone --branch ${BRANCH} --recurse-submodules https://github.com/billsonnn/nitro-imager.git .

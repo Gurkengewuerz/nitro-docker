@@ -37,11 +37,9 @@ find . -type f -name 'example-*' -exec bash -c 'cp -rf "$0" "${0/example-/}"' {}
 > The `&& \` is used to combine multiple commands into a single line in a Unix-like command shell. By using && \, the two commands are executed sequentially and only if the first command succeeds. If the first command fails, the second command will not be executed, saving you from potential errors.
 
 ```bash
-git clone https://github.com/Gurkengewuerz/nitro-docker.git && \
-cd nitro-docker/ && \
-git clone https://git.krews.org/morningstar/arcturus-morningstar-default-swf-pack.git assets/swf/ && \
-git clone https://github.com/krewsarchive/default-assets.git assets/assets/ && \
-wget https://github.com/billsonnn/nitro-react/files/10334858/room.nitro.zip && \
+git clone https://git.mc8051.de/nitro/arcturus-morningstar-default-swf-pack.git assets/swf/ && \
+git clone https://git.mc8051.de/nitro/default-assets.git assets/assets/ && \
+wget -O room.nitro.zip https://git.mc8051.de/attachments/e948e603-d0ea-4948-b313-e8290a1c4bc9 && \
 unzip -o room.nitro.zip -d assets/assets/bundled/generic && \
 docker compose up db -d
 ```
@@ -51,7 +49,7 @@ docker compose up db -d
 2. Configure the `.env` to your needs
 
 3. Download SQL updates: 
-https://git.krews.org/morningstar/Arcturus-Community/-/archive/ms4/dev/Arcturus-Community-ms4-dev.zip?path=sqlupdates
+https://git.mc8051.de/nitro/Arcturus-Community/src/branch/master/sqlupdates
 
 4. Manually initialize database with HeidiSQL.
 - Download `HeidiSQL` from: https://www.heidisql.com/download.php
@@ -115,7 +113,6 @@ UPDATE emulator_settings SET `value`='/app/assets/swf/c_images/Badgeparts' WHERE
 ```bash
 docker compose up assets -d && \
 docker compose up assets-build --build && \
-docker compose up imgproxy --build -d && \
 docker compose up arcturus --build -d
 ```
 
