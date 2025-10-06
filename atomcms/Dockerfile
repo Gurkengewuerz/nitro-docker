@@ -110,9 +110,9 @@ RUN echo 'max_execution_time = 300' >> /usr/local/etc/php/conf.d/custom.ini \
 # Set correct ownership
 RUN chown -R www-data:www-data /var/www/html
 
-COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
-
 RUN install-php-extensions sockets intl gd
+
+COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
 
 # Switch back to www-data user
 USER www-data
