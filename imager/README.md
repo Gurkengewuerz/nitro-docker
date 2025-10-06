@@ -77,4 +77,4 @@ To hold a certain drink, use an equal separator with the hand item id. You can o
 -   The rendered canvas size may not match habbos imager exactly, we will hopefully have this addressed soon.
 
 ## Test String:
-[`figure=hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61&action=std,wav&gesture=std&direction=2&head_direction=2&size=l&img_format=png`](http://labs.habox.org/generator-avatar)
+[`figure=hd-180-1.hr-100-61.ch-210-66.lg-270-82.sh-290-80&size=b&direction=4&head_direction=4&crr=0&gesture=sml&frame=1`](http://labs.habox.org/generator-avatar)

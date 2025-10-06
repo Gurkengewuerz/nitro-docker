@@ -52,6 +52,7 @@ for dic in known_names_copy:
     seen.add(key)
 
 with open("catalog_items.sql", "w", encoding='utf-8') as f:
+    f.write("SET collation_connection = 'latin1_swedish_ci';\n")
     for furni in known_names:
         # get rid of any unwanted characters for sql and remove non latin-1 characters
         # check the collation of the table

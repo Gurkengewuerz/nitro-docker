@@ -49,7 +49,7 @@ docker compose up db -d
 2. Configure the `.env` to your needs
 
 3. Download SQL updates: 
-https://git.mc8051.de/nitro/Arcturus-Community/src/branch/master/sqlupdates
+https://git.mc8051.de/nitro/Arcturus-Community/src/branch/ms4/dev/sqlupdates
 
 4. Manually initialize database with HeidiSQL.
 - Download `HeidiSQL` from: https://www.heidisql.com/download.php
@@ -122,11 +122,11 @@ docker compose up arcturus --build -d
 docker compose up nitro --build -d
 ```
 
-> habbo-downloader requires **Node.js 15.0** or higher you can install the newest version with the following command:
+> [habbo-downloader](https://github.com/higoka/habbo-downloader) requires **Node.js 15.0** or higher you can install the newest version with the following command:
 
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
-nvm install node
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+nvm install --lts
 ```
 
 > Next setup reverse proxies for your nginx or traefik server. You should disable proxy side caching.
@@ -152,7 +152,6 @@ nvm install node
 ```
 
 ```bash
-apt install npm -y && \
 npm i -g habbo-downloader && \
 rm -rf assets/swf/gordon/PRODUCTION && \
 habbo-downloader --output ./assets/swf --domain com --command badgeparts && \
@@ -168,7 +167,7 @@ habbo-downloader --output ./assets/swf --domain com --command mp3 && \
 habbo-downloader --output ./assets/swf --domain com --command pets && \
 habbo-downloader --output ./assets/swf --domain com --command promo && \
 cp -n assets/swf/dcr/hof_furni/icons/* assets/swf/dcr/hof_furni && \
-mv assets/swf/gordon/PRODUCTION* assets/swf/gordon/PRODUCTION && \
+mv assets/swf/gordon/*PRODUCTION* assets/swf/gordon/PRODUCTION && \
 docker compose up assets-build --build
 ```
 
