@@ -1,6 +1,7 @@
 db/*
 !db/.gitkeep
 assets/assets
+assets/update_badge_names.sql
 assets/translation/gamedata/
 assets/translation/*.sql
 !assets/translation/update_crackable.sql
