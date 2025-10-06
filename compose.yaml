@@ -118,9 +118,9 @@ services:
       - assets
       - arcturus
     ports:
-      - "8081:80"
+      - "8081:8080"
     volumes:
-      - ".cms.env:/var/www/html/.env"
+      - "./.cms.env:/var/www/html/.env"
       - "./atomcms/storage:/var/www/html/storage/app/public"
       - "./atomcms/logs:/var/www/html/storage/logs"
     restart: unless-stopped

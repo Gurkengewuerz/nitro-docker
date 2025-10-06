@@ -204,20 +204,31 @@ docker compose restart arcturus
 docker compose up cms --build -d
 ```
 
-5. Generate a new secret APP_KEY
+5. Generate a new secret APP_KEY and update your .cms.env file
 ```bash
-docker compose exec cms php artisan key:generate
+docker compose exec cms php artisan key:generate --show
 ```
 
-6. Open the CMS in the browser by default [`127.0.0.1:8081`](http://127.0.0.1:8081/) and do the basic setup.
+6. Restart the CMS container
+```bash
+docker compose down cms && docker compose up cms -d
+```
 
-7. Update automcms settings with HeidiSQL
+7. Seed database
+```bash
+docker compose exec cms php artisan migrate --seed
+```
+
+8. Open the CMS in the browser by default [`127.0.0.1:8081`](http://127.0.0.1:8081/) and do the basic setup.
+
+9. Update automcms settings with HeidiSQL
 
 ```sql
 UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/api/imager/?figure=' WHERE  `key` = 'avatar_imager';
 UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/swf/c_images/album1584' WHERE  `key` = 'badges_path';
 UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/usercontent/badgeparts/generated' WHERE  `key` = 'group_badge_path';
 UPDATE website_settings SET `value` = 'http://127.0.0.1:8080/swf/dcr/hof_furni' WHERE  `key` = 'furniture_icons_path';
+UPDATE website_settings SET `value` = '/housekeeping' WHERE  `key` = 'housekeeping_url';
 
 UPDATE website_settings SET `value` = 'arcturus' WHERE  `key` = 'rcon_ip';
 UPDATE website_settings SET `value` = '3001' WHERE  `key` = 'rcon_port';
@@ -226,6 +237,8 @@ UPDATE website_settings SET `value` = '3001' WHERE  `key` = 'rcon_port';
 UPDATE website_settings SET `value` = '4' WHERE  `key` = 'min_staff_rank';
 UPDATE website_settings SET `value` = '5' WHERE  `key` = 'min_maintenance_login_rank';
 UPDATE website_settings SET `value` = '6' WHERE  `key` = 'min_housekeeping_rank';
+
+UPDATE website_settings SET `value` = '0' WHERE  `key` = 'cloudflare_turnstile_enabled';
 ```
 
 **ℹ Notice**: badgeparts generator must be set up in arcturus and all files must be synced with the badge_parts.nitro

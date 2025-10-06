@@ -1,75 +1,123 @@
-FROM php:8.2-apache as builder
+# Stage 1: Composer dependencies
+FROM php:8-cli-alpine AS composer-builder
 
-ARG COMMIT=d0c28fb
+ARG COMMIT=53ea66d
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    libcurl4-openssl-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libonig-dev \
-    libssl-dev \
-    libzip-dev \
+# Install system dependencies and PHP extensions
+RUN apk add --no-cache \
     git \
     zip \
     unzip \
-    && docker-php-ext-install -j$(nproc) curl gd mbstring pdo_mysql sockets fileinfo zip \
-    && docker-php-ext-enable curl gd mbstring pdo_mysql sockets fileinfo zip
+    icu-dev \
+    libzip-dev \
+    linux-headers
 
-COPY --from=composer:lts /usr/bin/composer /usr/local/bin/composer
+RUN docker-php-ext-install -j$(nproc) \
+    sockets \
+    intl \
+    pdo_mysql \
+    zip
 
-RUN git config --global --add safe.directory /var/www/html
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Clone the repository
+RUN git config --global --add safe.directory /app
 RUN git clone --recurse-submodules https://github.com/ObjectRetros/atomcms.git .
 RUN git checkout $COMMIT
 
-RUN composer install
+# Install composer dependencies
+RUN composer install \
+    --no-interaction \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
+
+# Generate optimized autoload files
+RUN composer dump-autoload --optimize
 
 
-# ---------------------------------------------
-FROM node:lts as npm-builder
+# Stage 2: Node/NPM build
+FROM node:20-alpine AS npm-builder
 
-WORKDIR /var/www/html
+WORKDIR /app
 
-COPY --from=builder /var/www/html /var/www/html
+# Copy application files from composer stage
+COPY --from=composer-builder /app /app
 
-RUN yarn install
+# Install dependencies and build assets
+RUN yarn install --frozen-lockfile
 RUN yarn run build:atom
+RUN yarn run build:dusk
+
+# Clean up node_modules to save space
+RUN rm -rf node_modules
 
 
-# ---------------------------------------------
-FROM php:8.2-apache
+# Stage 3: Final image with serversideup/php (nginx + PHP-FPM)
+FROM serversideup/php:8-fpm-nginx-alpine
+
+ENV PHP_OPCACHE_ENABLE=1
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    libcurl4-openssl-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libonig-dev \
-    libssl-dev \
-    libzip-dev \
-    && docker-php-ext-install -j$(nproc) curl gd mbstring pdo_mysql sockets fileinfo \
-    && docker-php-ext-enable curl gd mbstring pdo_mysql sockets fileinfo
-RUN apt remove apt --autoremove -y --allow-remove-essential
+# Switch to root for setup
+USER root
 
-RUN a2enmod rewrite
+# Copy application from npm-builder
+COPY --from=npm-builder --chown=www-data:www-data /app /var/www/html
 
-COPY --from=npm-builder /var/www/html /var/www/html
-RUN rm -rf /var/www/html/node_modules
+# Create necessary directories and set permissions
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-RUN chown -R www-data:www-data /var/www/html/storage \
-    && chown -R www-data:www-data /var/www/html/bootstrap/cache
+# Custom nginx configuration for Laravel
+COPY <<'EOF' /etc/nginx/site-opts.d/laravel.conf
+# Laravel specific configurations
+client_max_body_size 20M;
 
-EXPOSE 80
+# Security headers
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-XSS-Protection "1; mode=block" always;
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+# Static file caching
+location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+EOF
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!AllowOverride None!AllowOverride All!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# PHP configuration overrides
+RUN echo 'max_execution_time = 300' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'upload_max_filesize = 20M' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'post_max_size = 20M' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'opcache.enable=1' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'opcache.memory_consumption=256' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'opcache.interned_strings_buffer=16' >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo 'opcache.max_accelerated_files=10000' >> /usr/local/etc/php/conf.d/custom.ini
 
-RUN echo 'max_execution_time = 120' >> /usr/local/etc/php/conf.d/docker-php-maxexectime.ini;
+# Set correct ownership
+RUN chown -R www-data:www-data /var/www/html
 
-CMD ["apache2-foreground"]
+COPY --chmod=755 ./entrypoint.d/ /etc/entrypoint.d/
+
+RUN install-php-extensions sockets intl gd
+
+# Switch back to www-data user
+USER www-data
+
+RUN php artisan storage:link --force --silent
+
+# serversideup/php uses S6 overlay to manage nginx + php-fpm
+# No need to specify CMD, it's handled by the base image
