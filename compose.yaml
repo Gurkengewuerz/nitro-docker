@@ -56,24 +56,28 @@ services:
     networks: [nitro]
 
   backup:
-    image: tiredofit/db-backup
+    image: tiredofit/db-backup:4.0.19
     volumes:
       - ./db/backup:/backup
     environment:
       - TIMEZONE=UTC
-      - DB_TYPE=mysql
-      - DB_HOST=db
-      - DB_USER=$MYSQL_USER
-      - DB_PASS=$MYSQL_PASSWORD
-      - DB_NAME=$MYSQL_DATABASE
-      - COMPRESSION=GZ
-      - ENABLE_CHECKSUM=TRUE
-      - CHECKSUM=SHA1
-      - DB_DUMP_BEGIN=0315
-      - DB_DUMP_FREQ=1440
-      - DB_CLEANUP_TIME=10080
-      - CREATE_LATEST_SYMLINK=FALSE
       - CONTAINER_ENABLE_MONITORING=FALSE
+      - DEFAULT_LOG_LEVEL=WARN
+
+      - DEFAULT_CREATE_LATEST_SYMLINK=FALSE
+      - BACKUP_JOB_CONCURRENCY=1
+      - DEFAULT_CHECKSUM=SHA1
+      - DEFAULT_COMPRESSION=GZ
+      - DEFAULT_BACKUP_INTERVAL=1440
+      - DEFAULT_BACKUP_BEGIN=0315
+      - DEFAULT_CLEANUP_TIME=10080
+
+      - DB01_TYPE=mysql
+      - DB01_HOST=db
+      - DB01_NAME=$MYSQL_USER
+      - DB01_USER=$MYSQL_USER
+      - DB01_PASS=$MYSQL_PASSWORD
+      - DB01_NAME=$MYSQL_DATABASE
     restart: unless-stopped
     networks: [nitro]
 

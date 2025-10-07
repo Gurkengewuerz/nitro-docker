@@ -21,3 +21,5 @@ atomcms/logs/*
 *.env
 nitro/*.json
 !example-*
+assets/roomitemtypes.json
+assets/wallitemtypes.json
