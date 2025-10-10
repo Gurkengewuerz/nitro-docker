@@ -29,17 +29,6 @@ services:
     restart: unless-stopped
     networks: [nitro]
 
-  assets-build:
-    build:
-      context: assets
-    env_file:
-      - .env
-    volumes:
-      - ./assets/configuration.json:/app/configuration.json
-      - ./assets/assets:/app/assets
-    restart: "no"
-    networks: [nitro]
-
   db:
     image: mysql:8
     depends_on:

@@ -168,7 +168,7 @@ habbo-downloader --output ./assets/swf --domain com --command pets && \
 habbo-downloader --output ./assets/swf --domain com --command promo && \
 cp -n assets/swf/dcr/hof_furni/icons/* assets/swf/dcr/hof_furni && \
 mv assets/swf/gordon/*PRODUCTION* assets/swf/gordon/PRODUCTION && \
-docker compose up assets-build --build
+./assets-build.sh
 ```
 
 
@@ -179,7 +179,7 @@ habbo-downloader --output ./assets/translation --domain com --command gamedata &
 cd ./assets/translation && \
 cp -rf gamedata/external*.txt ../swf/gamedata/ && \
 cd ../.. && \
-docker compose up assets-build --build && \
+./assets-build.sh && \
 cd ./assets/translation && \
 python FurnitureDataTranslator.py && \
 python SQLGenerator.py && \
