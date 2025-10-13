@@ -24,3 +24,5 @@ nitro/*.json
 !example-*
 assets/roomitemtypes.json
 assets/wallitemtypes.json
+atomcms/gamedata/*
+!atomcms/gamedata/.gitkeep

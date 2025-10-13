@@ -81,14 +81,42 @@ RUN mkdir -p \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Custom nginx configuration for Laravel
-COPY <<'EOF' /etc/nginx/site-opts.d/laravel.conf
-# Laravel specific configurations
-client_max_body_size 20M;
-
+COPY <<'EOF' /etc/nginx/server-opts.d/laravel.conf
 # Security headers
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-Content-Type-Options "nosniff" always;
 add_header X-XSS-Protection "1; mode=block" always;
+
+# CORS headers for /gamedata directory and all subdirectories
+location ~ ^/gamedata/ {
+    # Always add CORS headers
+    add_header Access-Control-Allow-Origin "*" always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,X-CSRF-TOKEN" always;
+    add_header Access-Control-Expose-Headers "Content-Length,Content-Range" always;
+    add_header Access-Control-Allow-Credentials "false" always;
+    
+    # Handle preflight requests
+    if ($request_method = 'OPTIONS') {
+        add_header Access-Control-Allow-Origin "*" always;
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+        add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,X-CSRF-TOKEN" always;
+        add_header Access-Control-Max-Age 86400 always;
+        add_header Content-Type "text/plain; charset=utf-8" always;
+        add_header Content-Length 0 always;
+        return 204;
+    }
+    
+    try_files $uri $uri/ @fallback;
+}
+
+# Fallback for gamedata requests
+location @fallback {
+    add_header Access-Control-Allow-Origin "*" always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,X-CSRF-TOKEN" always;
+    try_files $uri /index.php?$query_string;
+}
 
 # Static file caching
 location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {

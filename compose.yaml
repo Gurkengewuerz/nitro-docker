@@ -116,6 +116,7 @@ services:
       - "./.cms.env:/var/www/html/.env"
       - "./atomcms/storage:/var/www/html/storage/app/public"
       - "./atomcms/logs:/var/www/html/storage/logs"
+      - "./atomcms/gamedata:/var/www/html/public/gamedata"
     restart: unless-stopped
     networks: [nitro]
 
