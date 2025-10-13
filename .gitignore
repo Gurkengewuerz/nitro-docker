@@ -9,6 +9,7 @@ assets/translation/*.sql
 !assets/translation/fix_song_disks.sql
 assets/swf
 assets/usercontent/**/*.png
+assets/usercontent/**/*.gif
 ~$*.xlsx
 export/
 assets/usercontent/imageproxy/
